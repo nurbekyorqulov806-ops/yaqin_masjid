@@ -1,0 +1,32 @@
+{% load static %}<!doctype html>
+<html lang="uz">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>{% block title %}Yaqin Masjid: O'zbekiston masjidlari xaritasi{% endblock %}</title>
+  <meta name="description" content="O'zbekistondagi masjidlarni xaritada toping, eng yaqinini ko'ring, namoz vaqtlari va qiblani biling.">
+  <meta name="theme-color" content="#0B8A87">
+  <link rel="icon" href="{% static 'masjidlar/img/favicon.svg' %}" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=Onest:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  {% block head_css %}{% endblock %}
+  <link rel="stylesheet" href="{% static 'masjidlar/css/app.css' %}">
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem('ym:theme');
+        if (!t) t = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        document.documentElement.setAttribute('data-theme', t);
+      } catch (e) { document.documentElement.setAttribute('data-theme', 'light'); }
+    })();
+  </script>
+</head>
+<body class="{% block body_class %}{% endblock %}">
+{% block body %}{% endblock %}
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="{% static 'masjidlar/js/common.js' %}"></script>
+{% block scripts %}{% endblock %}
+</body>
+</html>

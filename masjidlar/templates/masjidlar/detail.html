@@ -1,0 +1,66 @@
+{% extends "masjidlar/base.html" %}
+{% load static l10n %}
+{% block title %}{{ m.name }}{% if m.city %}, {{ m.city }}{% endif %} | Yaqin Masjid{% endblock %}
+{% block body_class %}page-doc{% endblock %}
+{% block body %}
+<header class="doc-top">
+  <a class="brand" href="{% url 'home' %}">
+    <svg viewBox="0 0 40 40" width="28" height="28" aria-hidden="true"><rect width="40" height="40" rx="10" fill="var(--tile)"/><g fill="none" stroke="#fff" stroke-width="2"><rect x="11" y="11" width="18" height="18"/><rect x="11" y="11" width="18" height="18" transform="rotate(45 20 20)"/></g></svg>
+    <span>Yaqin Masjid</span>
+  </a>
+  <a class="btn btn-ghost" href="{% url 'home' %}">Xaritaga qaytish</a>
+</header>
+
+<main class="doc" id="doc" data-lat="{{ m.latitude|unlocalize }}" data-lon="{{ m.longitude|unlocalize }}" data-id="{{ m.pk }}" data-name="{{ m.name }}">
+  <section class="doc-hero">
+    <div class="pattern" aria-hidden="true"></div>
+    {% if m.photo %}<img class="doc-photo" src="{{ m.photo.url }}" alt="{{ m.name }}">{% endif %}
+    <h1>{{ m.name }}</h1>
+    {% if m.name_alt and m.name_alt != m.name %}<p class="alt">{{ m.name_alt }}</p>{% endif %}
+    <p class="addr">{% if m.address %}{{ m.address }}{% endif %}{% if m.address and m.city %}, {% endif %}{{ m.city }}</p>
+    <div class="actions">
+      <a class="btn btn-primary" id="goYandex" target="_blank" rel="noopener" href="#">Yandex xaritada yo'nalish</a>
+      <a class="btn btn-ghost" id="goGoogle" target="_blank" rel="noopener" href="#">Google Maps</a>
+      <button class="btn btn-ghost" id="favBtn" aria-pressed="false">Saqlash</button>
+      <button class="btn btn-ghost" id="shareBtn">Ulashish</button>
+    </div>
+    <p class="dist" id="distNote" hidden></p>
+  </section>
+
+  <div class="doc-grid">
+    <section class="card">
+      <h2>Joylashuvi</h2>
+      <div id="miniMap" class="mini-map"></div>
+      <button class="btn btn-ghost" id="distBtn">Mendan masofa</button>
+    </section>
+
+    <section class="card">
+      <h2>Namoz vaqtlari</h2>
+      <p class="muted" id="prayerNext"></p>
+      <div class="prayer-grid" id="prayerGrid"><span class="muted">Yuklanmoqda...</span></div>
+    </section>
+
+    <section class="card">
+      <h2>Qibla yo'nalishi</h2>
+      <div class="qibla" id="qibla"></div>
+    </section>
+
+    <section class="card">
+      <h2>Ma'lumot</h2>
+      <dl class="info">
+        {% if m.phone %}<dt>Telefon</dt><dd><a href="tel:{{ m.phone }}">{{ m.phone }}</a></dd>{% endif %}
+        {% if m.website %}<dt>Sayt</dt><dd><a href="{{ m.website }}" target="_blank" rel="noopener nofollow">{{ m.website }}</a></dd>{% endif %}
+        {% if m.opening_hours %}<dt>Ish vaqti</dt><dd>{{ m.opening_hours }}</dd>{% endif %}
+        {% if m.women_section is not None %}<dt>Ayollar uchun joy</dt><dd>{% if m.women_section %}Bor{% else %}Yo'q{% endif %}</dd>{% endif %}
+        <dt>Koordinata</dt><dd>{{ m.latitude|floatformat:5 }}, {{ m.longitude|floatformat:5 }}</dd>
+      </dl>
+      {% if m.description %}<p>{{ m.description|linebreaksbr }}</p>{% endif %}
+      <p class="muted">Ma'lumot noto'g'rimi? <a href="{% url 'add' %}">Yangi taklif yuboring</a>.</p>
+    </section>
+  </div>
+</main>
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'masjidlar/js/detail.js' %}"></script>
+{% endblock %}
